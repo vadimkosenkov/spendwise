@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Spendwise</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>Dashboard</h2>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>This month</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>
+        Total spent:
+        <strong>{{ expenseSummary.totalSpent }} {{ expenseSummary.currency }}</strong>
+      </p>
+      <p>
+        Remaining:
+        <strong>{{ budgetSummary.remaining }} {{ expenseSummary.currency }}</strong>
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
