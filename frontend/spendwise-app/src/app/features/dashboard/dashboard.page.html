@@ -12,15 +12,18 @@
       <ion-card-title>This month</ion-card-title>
     </ion-card-header>
 
-    <ion-card-content>
-      <p>
-        Total spent:
-        <strong>{{ expenseSummary.totalSpent }} {{ expenseSummary.currency }}</strong>
-      </p>
-      <p>
-        Remaining:
-        <strong>{{ budgetSummary.remaining }} {{ expenseSummary.currency }}</strong>
-      </p>
-    </ion-card-content>
+    @let dashboard = dashboard$ | async;
+    @if (dashboard) {
+      <ion-card-content>
+        <p>
+          Total spent:
+          <strong>{{ dashboard.totalSpent }} {{ dashboard.currency }}</strong>
+        </p>
+        <p>
+          Remaining:
+          <strong>{{ dashboard.remaining }} {{ dashboard.currency }}</strong>
+        </p>
+      </ion-card-content>
+    }
   </ion-card>
 </ion-content>

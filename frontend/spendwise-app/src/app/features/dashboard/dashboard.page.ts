@@ -1,21 +1,18 @@
-import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { DashboardService } from './services/dashboard.service';
+import { Component, inject } from "@angular/core";
+import { IonicModule } from "@ionic/angular";
+import { DashboardService } from "./services/dashboard.service";
+import { AsyncPipe } from "@angular/common";
+import { Observable } from "rxjs";
 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  imports: [IonicModule],
+  imports: [IonicModule, AsyncPipe],
 })
 export class DashboardPage {
-
-  expenseSummary = this.dashboardService.getExpenseSummary();
-  budgetSummary = this.dashboardService.getBudgetSummary();
-
-  constructor(
-    private dashboardService: DashboardService
-  ) {}
+  dashboardService: DashboardService = inject(DashboardService);
+  dashboard$: Observable<any> = this.dashboardService.getDashboard();
 }
 

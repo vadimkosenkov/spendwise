@@ -1,23 +1,22 @@
-import { Injectable } from '@angular/core';
-import { ExpenseSummary, BudgetSummary } from '../models/dashboard.models';
+import { inject, Injectable } from '@angular/core';
+import { DashboardSummary } from '../models/dashboard.models';
+import { map, Observable } from 'rxjs';
+import { GET_DASHBOARD } from '../dashboard.queries';
+import { Apollo } from "apollo-angular";
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
+  apollo: Apollo = inject(Apollo);
 
-  getExpenseSummary(): ExpenseSummary {
-    return {
-      totalSpent: 420,
-      currency: 'EUR',
-    };
-  }
-
-  getBudgetSummary(): BudgetSummary {
-    return {
-      limit: 1000,
-      spent: 420,
-      remaining: 580,
-    };
+  getDashboard(): Observable<DashboardSummary> {
+    return this.apollo
+      .watchQuery({
+        query: GET_DASHBOARD
+      })
+      .valueChanges.pipe(
+        map((result: any) => result.data?.dashboard)
+      );
   }
 }
