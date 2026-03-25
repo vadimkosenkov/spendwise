@@ -3,3 +3,7 @@ export interface DashboardSummary {
   currency: string;
   remaining: number;
 }
+
+export interface DashboardQueryData {
+  dashboard: DashboardSummary;
+}

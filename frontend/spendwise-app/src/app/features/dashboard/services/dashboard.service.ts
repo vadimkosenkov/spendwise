@@ -1,22 +1,49 @@
-import { inject, Injectable } from '@angular/core';
-import { DashboardSummary } from '../models/dashboard.models';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { DashboardQueryData, DashboardSummary } from '../models/dashboard.models';
 import { map, Observable } from 'rxjs';
 import { GET_DASHBOARD } from '../dashboard.queries';
 import { Apollo } from "apollo-angular";
+import QueryResult = Apollo.QueryResult;
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  apollo: Apollo = inject(Apollo);
+  private apollo: Apollo = inject(Apollo);
+
+  dashboard: WritableSignal<DashboardSummary | null> = signal(null);
+  loading: WritableSignal<boolean> = signal(false);
+  error: WritableSignal<string> = signal("");
+
+  loadDashboard(): void {
+    this.loading.set(true);
+    this.error.set("");
+
+    this.apollo
+      .query<DashboardQueryData>({
+        query: GET_DASHBOARD,
+      })
+      .subscribe({
+        next: (result: QueryResult<DashboardQueryData>): void => {
+          if (!result?.data) return;
+          this.dashboard.set(result.data.dashboard);
+        },
+        error: (): void => {
+          this.error.set("Failed to load dashboard");
+        },
+        complete: (): void => {
+          this.loading.set(false);
+        }
+      });
+  }
 
   getDashboard(): Observable<DashboardSummary> {
     return this.apollo
-      .watchQuery({
+      .watchQuery<DashboardQueryData>({
         query: GET_DASHBOARD
       })
       .valueChanges.pipe(
-        map((result: any) => result.data?.dashboard)
+        map((result: any) => result.data.dashboard)
       );
   }
 }

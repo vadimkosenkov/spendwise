@@ -1,18 +1,25 @@
-import { Component, inject } from "@angular/core";
+import { Component, effect, inject, signal, WritableSignal } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { DashboardService } from "./services/dashboard.service";
-import { AsyncPipe } from "@angular/common";
-import { Observable } from "rxjs";
+import { DashboardSummary } from "./models/dashboard.models";
 
 @Component({
-  standalone: true,
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
-  imports: [IonicModule, AsyncPipe],
+  imports: [IonicModule],
 })
 export class DashboardPage {
-  dashboardService: DashboardService = inject(DashboardService);
-  dashboard$: Observable<any> = this.dashboardService.getDashboard();
+  private dashboardService: DashboardService = inject(DashboardService);
+
+  public dashboard: WritableSignal<DashboardSummary | null>  = this.dashboardService.dashboard;
+  public loading: WritableSignal<boolean> = this.dashboardService.loading;
+  public error: WritableSignal<string> = this.dashboardService.error;
+
+  constructor() {
+    effect((): void => {
+      this.dashboardService.loadDashboard();
+    });
+  }
 }
 

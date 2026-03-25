@@ -7,23 +7,34 @@
 <ion-content class="ion-padding">
   <h2>Dashboard</h2>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>This month</ion-card-title>
-    </ion-card-header>
+  @if (loading()) {
+<!--    TODO add spinner-->
+    <p>Loading...</p>
+  }
 
-    @let dashboard = dashboard$ | async;
-    @if (dashboard) {
+  @if (error()) {
+<!--    TODO improve the error UI-->
+    <p style="color:red">{{ error() }}</p>
+  }
+
+  @if (dashboard()) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>This month</ion-card-title>
+      </ion-card-header>
+
       <ion-card-content>
+<!--        TODO improve the card UI-->
         <p>
           Total spent:
-          <strong>{{ dashboard.totalSpent }} {{ dashboard.currency }}</strong>
+          <strong>{{ dashboard()?.totalSpent }} {{ dashboard()?.currency }}</strong>
         </p>
+
         <p>
           Remaining:
-          <strong>{{ dashboard.remaining }} {{ dashboard.currency }}</strong>
+          <strong>{{ dashboard()?.remaining }} {{ dashboard()?.currency }}</strong>
         </p>
       </ion-card-content>
-    }
-  </ion-card>
+    </ion-card>
+  }
 </ion-content>
