@@ -36,14 +36,4 @@ export class DashboardService {
         }
       });
   }
-
-  getDashboard(): Observable<DashboardSummary> {
-    return this.apollo
-      .watchQuery<DashboardQueryData>({
-        query: GET_DASHBOARD
-      })
-      .valueChanges.pipe(
-        map((result: any) => result.data.dashboard)
-      );
-  }
 }
